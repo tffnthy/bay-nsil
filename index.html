@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>BaynSil</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif;
+            background-color: #f9fafb;
+        }
+        .sidebar {
+            background: linear-gradient(180deg, #7b9aff 0%, #f3f4f6 100%);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .nav-item {
+            transition: all 0.2s ease;
+        }
+        .nav-item:hover {
+            transform: translateX(4px);
+        }
+        .dropdown-menu {
+            transition: all 0.3s ease;
+            max-height: 0;
+            overflow: hidden;
+        }
+        .dropdown-menu.active {
+            max-height: 1000px;
+        }
+        .submenu {
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .submenu.active {
+            max-height: 500px;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+    <div class="flex">
+        <!-- Sidebar -->
+        <aside class="sidebar w-64 min-h-screen hidden md:block">
+            <div class="p-4">
+                <!-- Logo -->
+                <div class="flex items-center space-x-2 mb-8">
+                    <svg class="h-10 w-auto" viewBox="0 0 340 211" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M0 0 C11.00528463 8.42257957 20.84908729 19.91507927 23 34 C23.42149777 38.85597514 23.56589759 43.68962957 23.625 48.5625 C23.64820313 49.78114746 23.67140625 50.99979492 23.6953125 52.25537109 C23.58764302 64.73998399 19.55634308 75.13207639 12 85 C11.55011719 85.61359375 11.10023438 86.2271875 10.63671875 86.859375 C2.63245463 97.05071974 -10.36385223 103.75514712 -23 106 C-40.73385077 107.64471561 -56.32356334 105.17560106 -70.58984375 93.96484375 C-79.54566459 86.32882809 -85.02244355 77.55845307 -90 67 C-90.33 70.96 -90.66 74.92 -91 79 C-93.64 79 -96.28 79 -99 79 C-99 70.09 -99 61.18 -99 52 C-96.36 52 -93.72 52 -91 52 C-91.05800781 50.92363281 -91.11601562 49.84726563 -91.17578125 48.73828125 C-91.5496288 38.76710204 -90.57457996 31.07635492 -86 22 C-85.56558594 21.11828125 -85.13117188 20.2365625 -84.68359375 19.328125 C-76.91833108 5.08074847 -63.78971003 -3.95913077 -48.5 -8.5 C-31.88331231 -12.34121573 -14.17268507 -9.8439735 0 0 Z" fill="#0771FE" transform="translate(317,54)"/>
+                        <path d="M0 0 C1.14115548 0.00427978 1.14115548 0.00427978 2.30536461 0.00864601 C10.12051437 0.07473008 17.89084912 0.56494041 25.68212891 1.14990234 C27.16561577 1.25753629 28.64912671 1.36483891 30.13265991 1.47183228 C33.20333963 1.69474959 36.2736443 1.9221484 39.34375 2.15283203 C43.26207343 2.44679863 47.18118192 2.72830289 51.10065651 3.00644493 C54.1483393 3.22424377 57.1954789 3.44900361 60.24250412 3.67580032 C61.68791802 3.78247696 63.1334979 3.88693093 64.57924271 3.98902512 C66.5953411 4.13235136 68.61068343 4.28619371 70.62597656 4.44042969 C72.33776596 4.56700455 72.33776596 4.56700455 74.08413696 4.69613647 C77.70654093 5.1672324 80.95168456 5.89629178 84.39306641 7.12646484 C87.07233982 11.14537497 86.54907889 13.36808407 86.39306641 18.12646484 C87.69244141 18.18833984 88.99181641 18.25021484 90.33056641 18.31396484 C97.46750729 19.13314202 103.04232247 22.30361115 107.83056641 27.62646484 C111.72853279 32.63659338 113.04605851 36.70537584 112.39306641 43.12646484 C111.73242317 44.52500395 111.02116634 45.90046462 110.26806641 47.25146484 C108.50422685 50.32812113 108.50422685 50.32812113 109.01806641 53.81396484 C109.47181641 54.57708984 109.92556641 55.34021484 110.39306641 56.12646484 C112.63697092 60.8635966 113.34546688 65.01609367 111.77587891 70.14208984 C108.81329221 77.01109616 103.60084764 80.18843035 97.39306641 83.93896484 C93.65829398 85.41731226 90.38964307 85.78193237 86.39306641 86.12646484 C86.47556641 87.01333984 86.55806641 87.90021484 86.64306641 88.81396484 C86.32815616 92.98652562 85.38533922 94.23834114 82.39306641 97.12646484 C79.76106857 97.77769286 77.64261852 98.08835063 74.97509766 98.24365234 C73.34819934 98.38138042 71.72141651 98.52047686 70.09472656 98.66064453 C68.73979095 98.76693176 68.73979095 98.76693176 67.35748291 98.87536621 C62.93151815 99.25026417 58.52004668 99.7439439 54.10494995 100.22857666 C49.06125648 100.78158713 44.01509718 101.31032355 38.96899414 101.84082031 C36.36748061 102.11555791 33.76624301 102.39292036 31.1652832 102.67285156 C27.34993913 103.0831345 23.53374958 103.48456666 19.71728516 103.88427734 C18.57216965 104.00924591 17.42705414 104.13421448 16.24723816 104.26296997 C10.61188648 104.84418038 4.97159188 105.29324834 -0.68969727 105.51660156 C-1.72962326 105.56340057 -2.76954926 105.61019958 -3.84098816 105.65841675 C-6.60693359 105.12646484 -6.60693359 105.12646484 -8.88398743 102.79202271 C-21.98230285 82.52771131 -15.41175886 52.25853071 -13.73193359 29.68896484 C-13.64525421 28.50870728 -13.55857483 27.32844971 -13.4692688 26.11242676 C-13.21587063 22.72164638 -12.94919545 19.33220903 -12.67724609 15.94287109 C-12.60002823 14.91168655 -12.52281036 13.88050201 -12.44325256 12.81806946 C-12.32342262 11.38626595 -12.32342262 11.38626595 -12.20117188 9.92553711 C-12.13455353 9.09208267 -12.06793518 8.25862823 -11.9992981 7.3999176 C-11.57746816 4.95573517 -10.90735068 3.23340901 -9.60693359 1.12646484 C-6.54638082 -0.40381155 -3.35564503 -0.02078973 0 0 Z" fill="#161616" transform="translate(15.60693359375,43.87353515625)"/>
+                        <path d="M0 0 C11.00528463 8.42257957 20.84908729 19.91507927 23 34 C23.42149777 38.85597514 23.56589759 43.68962957 23.625 48.5625 C23.64820313 49.78114746 23.67140625 50.99979492 23.6953125 52.25537109 C23.60090851 63.2018083 20.74984041 73.25020687 14 82 C13.67 81.34 13.34 80.68 13 80 C13.99 78.515 13.99 78.515 15 77 C15.3446156 74.47272837 15.3446156 74.47272837 15.35400391 71.6015625 C15.37967438 70.49611084 15.40534485 69.39065918 15.43179321 68.25170898 C15.44656708 67.05489502 15.46134094 65.85808105 15.4765625 64.625 C15.49270599 63.39015869 15.50884949 62.15531738 15.52548218 60.88305664 C15.5531712 58.26372903 15.57461226 55.64432914 15.59033203 53.02490234 C15.61665626 49.04281863 15.71237642 45.06321171 15.80078125 41.08203125 C15.821047 38.53387853 15.83807549 35.98569761 15.8515625 33.4375 C15.88657867 32.25687988 15.92159485 31.07625977 15.95767212 29.85986328 C15.91099319 20.83966254 13.10764841 15.56638192 7 9 C-4.74203174 -1.97070676 -18.06589213 -7.6063741 -34.125 -7.25 C-35.06214844 -7.24484375 -35.99929688 -7.2396875 -36.96484375 -7.234375 C-42.3873954 -7.17370309 -47.63456275 -6.78272261 -53 -6 C-38.25432969 -15.83044688 -13.49311884 -9.37196471 0 0 Z" fill="#2784FF" transform="translate(317,54)"/>
+                    </svg>
+                    <span class="text-2xl font-bold text-primary-600">BaynSil</span>
+                </div>
+
+                <!-- Auth Buttons -->
+                <div class="mb-8">
+                    <a href="/login" class="w-full block text-center bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 px-4 rounded-lg transition duration-200">
+                        LOGIN / SIGN UP
+                    </a>
+                </div>
+
+                <!-- Products Dropdown -->
+                <div class="mb-4">
+                    <button id="dropdownToggle" class="w-full flex justify-between items-center bg-white text-gray-800 font-medium py-3 px-4 rounded-lg shadow-sm hover:bg-gray-50 transition duration-200">
+                        <span>PRODUCTS</span>
+                        <span class="text-xs">▼</span>
+                    </button>
+                    
+                    <ul class="dropdown-menu bg-white rounded-lg shadow-sm mt-1 overflow-hidden" id="dropdownMenu">
+                        <li class="border-b border-gray-100 last:border-0">
+                            <div class="has-submenu">
+                                <a href="electronics.html" class="flex justify-between items-center py-3 px-4 hover:bg-gray-50 transition duration-200">
+                                    <span>ELECTRONICS</span>
+                                    <span class="text-xs">▶</span>
+                                </a>
+                                <ul class="submenu pl-6 bg-gray-50">
+                                    <li><a href="#" class="block py-2 px-4 hover:bg-gray-100 transition duration-200">Phones</a></li>
+                                    <li><a href="#" class="block py-2 px-4 hover:bg-gray-100 transition duration-200">TVs</a></li>
+                                    <li><a href="#" class="block py-2 px-4 hover:bg-gray-100 transition duration-200">Cameras</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="border-b border-gray-100 last:border-0">
+                            <div class="has-submenu">
+                                <a href="home-appliances.html" class="flex justify-between items-center py-3 px-4 hover:bg-gray-50 transition duration-200">
+                                    <span>HOME APPLIANCES</span>
+                                    <span class="text-xs">▶</span>
+                                </a>
+                                <ul class="submenu pl-6 bg-gray-50">
+                                    <li><a href="#" class="block py-2 px-4 hover:bg-gray-100 transition duration-200">Refrigerators</a></li>
+                                    <li><a href="#" class="block py-2 px-4 hover:bg-gray-100 transition duration-200">Washing Machines</a></li>
+                                    <li><a href="#" class="block py-2 px-4 hover:bg-gray-100 transition duration-200">Microwaves</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="border-b border-gray-100 last:border-0">
+                            <div class="has-submenu">
+                                <a href="toys-games.html" class="flex justify-between items-center py-3 px-4 hover:bg-gray-50 transition duration-200">
+                                    <span>TOYS, GAMES & COLLECTIBLES</span>
+                                    <span class="text-xs">▶</span>
+                                </a>
+                                <ul class="submenu pl-6 bg-gray-50">
+                                    <li><a href="#" class="block py-2 px-4 hover:bg-gray-100 transition duration-200">Action Figures</a></li>
+                                    <li><a href="#" class="block py-2 px-4 hover:bg-gray-100 transition duration-200">Board Games</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="border-b border-gray-100 last:border-0">
+                            <div class="has-submenu">
+                                <a href="#" class="flex justify-between items-center py-3 px-4 hover:bg-gray-50 transition duration-200">
+                                    <span>CLOTHING</span>
+                                    <span class="text-xs">▶</span>
+                                </a>
+                                <ul class="submenu pl-6 bg-gray-50">
+                                    <li><a href="#" class="block py-2 px-4 hover:bg-gray-100 transition duration-200">MENS</a></li>
+                                    <li><a href="#" class="block py-2 px-4 hover:bg-gray-100 transition duration-200">WOMENS</a></li>
+                                    <li><a href="#" class="block py-2 px-4 hover:bg-gray-100 transition duration-200">GIRLS</a></li>
+                                    <li><a href="#" class="block py-2 px-4 hover:bg-gray-100 transition duration-200">BOYS</a></li>
+                                    <li><a href="#" class="block py-2 px-4 hover:bg-gray-100 transition duration-200">BABY</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="border-b border-gray-100 last:border-0">
+                            <div class="has-submenu">
+                                <a href="#" class="flex justify-between items-center py-3 px-4 hover:bg-gray-50 transition duration-200">
+                                    <span>SHOES</span>
+                                    <span class="text-xs">▶</span>
+                                </a>
+                                <ul class="submenu pl-6 bg-gray-50">
+                                    <li><a href="#" class="block py-2 px-4 hover:bg-gray-100 transition duration-200">MENS</a></li>
+                                    <li><a href="#" class="block py-2 px-4 hover:bg-gray-100 transition duration-200">WOMENS</a></li>
+                                    <li><a href="#" class="block py-2 px-4 hover:bg-gray-100 transition duration-200">KIDS</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="border-b border-gray-100 last:border-0">
+                            <div class="has-submenu">
+                                <a href="#" class="flex justify-between items-center py-3 px-4 hover:bg-gray-50 transition duration-200">
+                                    <span>MOBILE GADGETS</span>
+                                    <span class="text-xs">▶</span>
+                                </a>
+                                <ul class="submenu pl-6 bg-gray-50">
+                                    <li><a href="#" class="block py-2 px-4 hover:bg-gray-100 transition duration-200">Action Figures</a></li>
+                                    <li><a href="#" class="block py-2 px-4 hover:bg-gray-100 transition duration-200">Board Games</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="border-b border-gray-100 last:border-0">
+                            <div class="has-submenu">
+                                <a href="#" class="flex justify-between items-center py-3 px-4 hover:bg-gray-50 transition duration-200">
+                                    <span>LAPTOPS & COMPUTERS</span>
+                                    <span class="text-xs">▶</span>
+                                </a>
+                                <ul class="submenu pl-6 bg-gray-50">
+                                    <li><a href="#" class="block py-2 px-4 hover:bg-gray-100 transition duration-200">MONITOR</a></li>
+                                    <li><a href="#" class="block py-2 px-4 hover:bg-gray-100 transition duration-200">KEYBOARD AND MOUSE</a></li>
+                                    <li><a href="#" class="block py-2 px-4 hover:bg-gray-100 transition duration-200">WOMENS</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1">
+            <!-- Top Bar -->
+            <header class="sticky top-0 z-10 bg-white shadow-sm">
+                <div class="container mx-auto px-4 py-3 flex items-center justify-between">
+                    <!-- Search Box -->
+                    <div class="w-full max-w-md">
+                        <div class="relative flex items-center">
+                            <input
+                                type="text"
+                                placeholder="Search..."
+                                class="w-full pl-4 pr-10 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                            />
+                            <button class="absolute right-0 mr-2 p-1 text-primary-600 hover:text-primary-800">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Icons -->
+                    <div class="flex items-center space-x-4">
+                        <button class="p-2 text-gray-600 hover:text-primary-600">
+                            <i class="fa-solid fa-basket-shopping"></i>
+                        </button>
+                        <button class="p-2 text-gray-600 hover:text-primary-600">
+                            <i class="fa-regular fa-circle-user"></i>
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Hero Section -->
+            <section class="bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+                <div class="container mx-auto flex flex-col md:flex-row items-center">
+                    <div class="md:w-1/2 mb-8 md:mb-0">
+                        <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+                            FIND YOUR <br><span class="text-primary-600">NEEDS</span>
+                        </h1>
+                        <p class="text-lg text-gray-600 mb-6">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse id nisl tortor. Nunc ultricies, urna quis blandit feugiat, purus massa.
+                        </p>
+                        <button class="bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 px-6 rounded-lg transition duration-200">
+                            SHOP
+                        </button>
+                    </div>
+                    <div class="md:w-1/2 flex justify-center">
+                        <img src="vector-graphics-stock-photography-royalty-free-illustration-basket-png-favpng-nH0TEXx9TV9LBNUsK6RZAWX1g-removebg-preview.png" alt="Basket" class="max-w-xs md:max-w-md">
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // Dropdown toggle functionality
+        document.getElementById('dropdownToggle').addEventListener('click', function() {
+            const menu = document.getElementById('dropdownMenu');
+            menu.classList.toggle('active');
+        });
+
+        // Submenu toggle functionality
+        const submenuToggles = document.querySelectorAll('.has-submenu > a');
+        submenuToggles.forEach(toggle => {
+            toggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                const submenu = this.nextElementSibling;
+                submenu.classList.toggle('active');
+                
+                // Toggle arrow icon
+                const arrow = this.querySelector('span');
+                if (submenu.classList.contains('active')) {
+                    arrow.textContent = '▼';
+                } else {
+                    arrow.textContent = '▶';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

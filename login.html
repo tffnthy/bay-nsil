@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BaynSil - Login</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            600: '#0284c7',
+                            700: '#0369a1',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif;
+            background-color: #f9fafb;
+        }
+        .auth-card {
+            max-width: 400px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        .input-field {
+            transition: all 0.2s ease;
+        }
+        .input-field:focus-within {
+            border-color: #0284c7;
+            box-shadow: 0 0 0 1px #0284c7;
+        }
+        .toggle-form {
+            color: #0284c7;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+        .toggle-form:hover {
+            color: #0369a1;
+        }
+        .password-requirements {
+            font-size: 0.75rem;
+            color: #6b7280;
+            margin-top: 0.25rem;
+        }
+        .requirement {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.25rem;
+        }
+        .requirement i {
+            margin-right: 0.25rem;
+            font-size: 0.6rem;
+        }
+        .valid {
+            color: #10b981;
+        }
+        .invalid {
+            color: #9ca3af;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex flex-col">
+    <!-- Simple Header -->
+    <header class="bg-white shadow-sm py-4">
+        <div class="container mx-auto px-4 flex items-center">
+            <div class="flex items-center space-x-2">
+                <svg class="h-8 w-auto" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L2 7v10l10 5 10-5V7L12 2z" fill="#0284c7"/>
+                    <path d="M12 12l-5-3v6l5 3 5-3V9l-5 3z" fill="#0369a1"/>
+                </svg>
+                <span class="text-xl font-bold text-primary-600">BaynSil</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow flex items-center justify-center p-4">
+        <div class="auth-card bg-white p-8 w-full">
+            <!-- Sign In Form (default visible) -->
+            <div id="signin-form">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Sign in to your account</h2>
+                
+                <form id="signin" class="space-y-4">
+                    <div class="space-y-1">
+                        <label for="login-email" class="text-sm font-medium text-gray-700">Email address</label>
+                        <div class="input-field relative border border-gray-300 rounded-md px-3 py-2">
+                            <input type="email" id="login-email" name="email" placeholder="you@example.com" 
+                                   class="w-full outline-none" required />
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-1">
+                        <div class="flex justify-between items-center">
+                            <label for="login-password" class="text-sm font-medium text-gray-700">Password</label>
+                            <a href="#" class="text-xs text-primary-600 hover:text-primary-700">Forgot password?</a>
+                        </div>
+                        <div class="input-field relative border border-gray-300 rounded-md px-3 py-2">
+                            <input type="password" id="login-password" name="password" placeholder="Password..." 
+                                   class="w-full outline-none" required minlength="8"
+                                   pattern="^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,}$" 
+                                   title="Password must be at least 8 characters with at least one uppercase letter, one number, and one special character"/>
+                            <div class="absolute right-3 top-1/2 transform -translate-y-1/2">
+                                <i class="fas fa-eye cursor-pointer text-gray-400 hover:text-gray-600" 
+                                   onclick="togglePasswordVisibility('login-password', this)"></i>
+                            </div>
+                        </div>
+                        <div class="password-requirements">
+                            <div class="requirement">
+                                <i class="fas fa-circle" id="login-length-check"></i>
+                                <span>Minimum 8 characters</span>
+                            </div>
+                            <div class="requirement">
+                                <i class="fas fa-circle" id="login-uppercase-check"></i>
+                                <span>At least one uppercase letter</span>
+                            </div>
+                            <div class="requirement">
+                                <i class="fas fa-circle" id="login-number-check"></i>
+                                <span>At least one number</span>
+                            </div>
+                            <div class="requirement">
+                                <i class="fas fa-circle" id="login-special-check"></i>
+                                <span>At least one special character</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="loginErr" class="text-sm text-red-600"></div>
+                    
+                    <button type="submit" class="w-full bg-primary-600 text-white py-2 px-4 rounded-md hover:bg-primary-700 transition">
+                        Sign In
+                    </button>
+                </form>
+                
+                <div class="mt-4 text-center text-sm text-gray-600">
+                    Don't have an account? 
+                    <span id="show-signup" class="toggle-form">Sign up</span>
+                </div>
+            </div>
+            
+            <!-- Sign Up Form (hidden by default) -->
+            <div id="signup-form" class="hidden">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Create your account</h2>
+                
+                <form id="signup" class="space-y-4">
+                    <div class="space-y-1">
+                        <label for="signup-name" class="text-sm font-medium text-gray-700">Full name</label>
+                        <div class="input-field relative border border-gray-300 rounded-md px-3 py-2">
+                            <input type="text" id="signup-name" name="name" placeholder="John Doe" 
+                                   class="w-full outline-none" required />
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-1">
+                        <label for="signup-email" class="text-sm font-medium text-gray-700">Email address</label>
+                        <div class="input-field relative border border-gray-300 rounded-md px-3 py-2">
+                            <input type="email" id="signup-email" name="email" placeholder="you@example.com" 
+                                   class="w-full outline-none" required />
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-1">
+                        <label for="signup-password" class="text-sm font-medium text-gray-700">Password</label>
+                        <div class="input-field relative border border-gray-300 rounded-md px-3 py-2">
+                            <input type="password" id="signup-password" name="password" placeholder="Password..." 
+                                   class="w-full outline-none" required minlength="8"
+                                   pattern="^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,}$" 
+                                   title="Password must be at least 8 characters with at least one uppercase letter, one number, and one special character"/>
+                            <div class="absolute right-3 top-1/2 transform -translate-y-1/2">
+                                <i class="fas fa-eye cursor-pointer text-gray-400 hover:text-gray-600" 
+                                   onclick="togglePasswordVisibility('signup-password', this)"></i>
+                            </div>
+                        </div>
+                        <div class="password-requirements">
+                            <div class="requirement">
+                                <i class="fas fa-circle" id="signup-length-check"></i>
+                                <span>Minimum 8 characters</span>
+                            </div>
+                            <div class="requirement">
+                                <i class="fas fa-circle" id="signup-uppercase-check"></i>
+                                <span>At least one uppercase letter</span>
+                            </div>
+                            <div class="requirement">
+                                <i class="fas fa-circle" id="signup-number-check"></i>
+                                <span>At least one number</span>
+                            </div>
+                            <div class="requirement">
+                                <i class="fas fa-circle" id="signup-special-check"></i>
+                                <span>At least one special character</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="signErr" class="text-sm text-red-600"></div>
+                    
+                    <button type="submit" class="w-full bg-primary-600 text-white py-2 px-4 rounded-md hover:bg-primary-700 transition">
+                        Sign Up
+                    </button>
+                </form>
+                
+                <div class="mt-4 text-center text-sm text-gray-600">
+                    Already have an account? 
+                    <span id="show-signin" class="toggle-form">Sign in</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Toggle between sign in and sign up forms
+        document.getElementById('show-signup').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('signin-form').classList.add('hidden');
+            document.getElementById('signup-form').classList.remove('hidden');
+        });
+        
+        document.getElementById('show-signin').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('signup-form').classList.add('hidden');
+            document.getElementById('signin-form').classList.remove('hidden');
+        });
+
+        // Toggle password visibility
+        function togglePasswordVisibility(inputId, icon) {
+            const input = document.getElementById(inputId);
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+        // Email validation
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        // Password validation (at least 8 characters, one uppercase, one number, and one special character)
+        function validatePassword(password) {
+            const hasMinLength = password.length >= 8;
+            const hasUpperCase = /[A-Z]/.test(password);
+            const hasNumber = /[0-9]/.test(password);
+            const hasSpecialChar = /[!@#$%^&*]/.test(password);
+            return hasMinLength && hasUpperCase && hasNumber && hasSpecialChar;
+        }
+
+        // Update password requirement indicators
+        function updatePasswordRequirements(inputId, prefix) {
+            const password = document.getElementById(inputId).value;
+            const lengthCheck = document.getElementById(`${prefix}-length-check`);
+            const uppercaseCheck = document.getElementById(`${prefix}-uppercase-check`);
+            const numberCheck = document.getElementById(`${prefix}-number-check`);
+            const specialCheck = document.getElementById(`${prefix}-special-check`);
+            
+            // Check length requirement
+            if (password.length >= 8) {
+                lengthCheck.classList.add('valid');
+                lengthCheck.classList.remove('invalid');
+                lengthCheck.classList.remove('fa-circle');
+                lengthCheck.classList.add('fa-check');
+            } else {
+                lengthCheck.classList.add('invalid');
+                lengthCheck.classList.remove('valid');
+                lengthCheck.classList.remove('fa-check');
+                lengthCheck.classList.add('fa-circle');
+            }
+            
+            // Check uppercase requirement
+            if (/[A-Z]/.test(password)) {
+                uppercaseCheck.classList.add('valid');
+                uppercaseCheck.classList.remove('invalid');
+                uppercaseCheck.classList.remove('fa-circle');
+                uppercaseCheck.classList.add('fa-check');
+            } else {
+                uppercaseCheck.classList.add('invalid');
+                uppercaseCheck.classList.remove('valid');
+                uppercaseCheck.classList.remove('fa-check');
+                uppercaseCheck.classList.add('fa-circle');
+            }
+            
+            // Check number requirement
+            if (/[0-9]/.test(password)) {
+                numberCheck.classList.add('valid');
+                numberCheck.classList.remove('invalid');
+                numberCheck.classList.remove('fa-circle');
+                numberCheck.classList.add('fa-check');
+            } else {
+                numberCheck.classList.add('invalid');
+                numberCheck.classList.remove('valid');
+                numberCheck.classList.remove('fa-check');
+                numberCheck.classList.add('fa-circle');
+            }
+            
+            // Check special character requirement
+            if (/[!@#$%^&*]/.test(password)) {
+                specialCheck.classList.add('valid');
+                specialCheck.classList.remove('invalid');
+                specialCheck.classList.remove('fa-circle');
+                specialCheck.classList.add('fa-check');
+            } else {
+                specialCheck.classList.add('invalid');
+                specialCheck.classList.remove('valid');
+                specialCheck.classList.remove('fa-check');
+                specialCheck.classList.add('fa-circle');
+            }
+        }
+
+        // Setup password requirement indicators for both forms
+        document.getElementById('login-password').addEventListener('input', function() {
+            updatePasswordRequirements('login-password', 'login');
+        });
+
+        document.getElementById('signup-password').addEventListener('input', function() {
+            updatePasswordRequirements('signup-password', 'signup');
+        });
+
+        // Form validation for sign up
+        document.getElementById('signup').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('signup-name').value.trim();
+            const email = document.getElementById('signup-email').value.trim();
+            const password = document.getElementById('signup-password').value;
+            const errorElement = document.getElementById('signErr');
+            
+            errorElement.textContent = '';
+            
+            if (!name) {
+                errorElement.textContent = 'Name is required';
+                return;
+            }
+            
+            if (!validateEmail(email)) {
+                errorElement.textContent = 'Please enter a valid email address';
+                return;
+            }
+            
+            if (!validatePassword(password)) {
+                errorElement.textContent = 'Password must be at least 8 characters with at least one uppercase letter, one number, and one special character';
+                return;
+            }
+            
+            // Check if email already exists (simulating with localStorage)
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const userExists = users.some(user => user.email === email);
+            
+            if (userExists) {
+                errorElement.textContent = 'Email already registered';
+                return;
+            }
+            
+            // Create new user
+            const newUser = {
+                id: Date.now(),
+                name: name,
+                email: email,
+                password: password
+            };
+            
+            users.push(newUser);
+            localStorage.setItem('users', JSON.stringify(users));
+            
+            alert('Registration successful! Please sign in.');
+            document.getElementById('signup-form').classList.add('hidden');
+            document.getElementById('signin-form').classList.remove('hidden');
+            this.reset();
+            
+            // Reset password indicators
+            updatePasswordRequirements('signup-password', 'signup');
+        });
+
+        // Form validation for sign in
+        document.getElementById('signin').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value.trim();
+            const password = document.getElementById('login-password').value;
+            const errorElement = document.getElementById('loginErr');
+            
+            errorElement.textContent = '';
+            
+            if (!validateEmail(email)) {
+                errorElement.textContent = 'Please enter a valid email address';
+                return;
+            }
+            
+            if (!validatePassword(password)) {
+                errorElement.textContent = 'Password must be at least 8 characters with at least one uppercase letter, one number, and one special character';
+                return;
+            }
+            
+            // Check if user exists (simulating with localStorage)
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const user = users.find(user => user.email === email && user.password === password);
+            
+            if (!user) {
+                errorElement.textContent = 'Invalid email or password';
+                return;
+            }
+            
+            // Store current user in localStorage
+            localStorage.setItem('currentUser', JSON.stringify(user));
+            
+            // Redirect to homepage or dashboard
+            window.location.href = '/views/homepage.html';
+        });
+
+        // Demo user data (for testing)
+        if (!localStorage.getItem('users')) {
+            const demoUsers = [
+                { id: 1, name: 'Demo User', email: 'demo@example.com', password: 'Password123!' }
+            ];
+            localStorage.setItem('users', JSON.stringify(demoUsers));
+        }
+
+        // Initialize password requirement indicators
+        updatePasswordRequirements('login-password', 'login');
+        updatePasswordRequirements('signup-password', 'signup');
+    </script>
+</body>
+</html>
